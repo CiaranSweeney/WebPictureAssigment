@@ -1,0 +1,91 @@
+<html>
+	<head>
+	<!--	Ciarán Sweeney	c12317616	Assignment 1 -->
+	<script>
+		function loadPic(){
+			picLoader(1,getRowNum());
+			document.getElementById("more").style.visibility="visible";
+		}
+		window.onload = loadPic;
+	</script>
+	<script>
+		var count=0;
+		var no_picture=false;
+		var current_pic="";
+		var row_num=5;
+		var next=count+row_num;
+		function loadMore(){
+			next=count+row_num;
+			picLoader(count+1,next);
+		}
+		function addCount(){
+			count++;
+		}
+		function didNotLoad(err){
+			no_picture=true;
+			document.getElementById("more").style.visibility="hidden";
+			for(var i=err.id; i<=next; i++ ){
+				document.getElementById(i).remove();
+			}
+		}
+		function select_pic(b){
+			if(current_pic != ""){
+				document.getElementById(current_pic).style.border="none";
+			}
+			 b.style.border = "4px solid black";
+			 document.getElementById("remove").style.visibility="visible";
+			 current_pic=b.id;
+			 document.getElementById("description").innerHTML="This is the description of image "+current_pic;
+		}
+		function removePic(){
+			var picElement=document.getElementById("pic");
+			var pic_to_remove = document.getElementById(current_pic);
+			picElement.removeChild(pic_to_remove); 
+			current_pic="";
+			document.getElementById("more").style.visibility="hidden";
+			document.getElementById("description").innerHTML="";
+			document.getElementById("remove").style.visibility="hidden";
+		}
+		function picWidth(){
+			var size=100/row_num;
+			var gap=(size*2)/100;
+			return size-gap;
+		}
+		function getRowNum(){
+			return row_num;
+		}
+		
+		function picLoader(i,next){
+			var picElement=document.getElementById("pic");
+			var photo=document.createElement("img");
+			photo.id=i;
+			photo.style.width=picWidth()+"%";
+			photo.setAttribute("onclick","select_pic(this);");
+			photo.setAttribute("onerror","didNotLoad(this);");
+			if(i<=9){
+				photo.src="img/0"+i+".jpg";
+				}
+			else{
+				photo.src="img/"+i+".jpg";
+			}
+			if(!(no_picture) && i<=next){
+				picElement.appendChild(photo);
+				addCount();
+				i++;
+				picLoader(i,next);
+			}
+		}
+	</script>
+	</head>
+	<body>
+	<div id="pic">
+	</div>
+	<button type="button" id="more"  onclick="loadMore()" style="visibility:hidden;" >Add More</button>
+	<br>
+	<p id="description"><p>
+	<br>
+	<img src="img/cross.jpg" id="remove" onclick="removePic()"  style="width:4%; height:4%; visibility:hidden;">
+	</body>
+	
+	
+</html>
